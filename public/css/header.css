@@ -1,0 +1,65 @@
+/* Header specific styles */
+.page-header {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}
+
+.header-logo:hover {
+    opacity: 1;
+}
+
+.header-logo svg {
+    width: 24px;
+    height: 24px;
+    stroke: #ffffff;
+}
+
+.app-name-small {
+    color: #ffffff;
+}
+
+.back-btn {
+    text-decoration: none;
+    color: #888888;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    border-color: #ff7a45;
+    color: #ffffff;
+    background: rgba(255, 122, 69, 0.1);
+}
+
+@media (max-width: 600px) {
+    .page-header {
+        padding: 20px;
+    }
+    .app-name-small {
+        display: none;
+    }
+}
