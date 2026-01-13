@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-// importation of controler is in progress unitl they are being created
+const { dashboardController,
+    loginController,
+    signupController,
+    unexpectedRouteController
+} = require("../controllers/appControllers");
 
 router.get("/", dashboardController);
 router.get("/login", loginController);
