@@ -1,0 +1,14 @@
+[
+  {
+    "username": "hello",
+    "email": "test@abc.com",
+    "password": "$2b$10$PeG2LluJtlEbAMe9l2nsz.aBWkkC74gNtUcvTMogg7315QDgNXrH2",
+    "createdAt": "2026-01-13T12:38:08.774Z"
+  },
+  {
+    "username": "helslo",
+    "email": "tests@abc.com",
+    "password": "$2b$10$LoRZIYzzrDEokXtmddE7cuNvVHJK04TcAZ3L3m5pwdW6gjoVIsZ8u",
+    "createdAt": "2026-01-13T12:38:44.781Z"
+  }
+]

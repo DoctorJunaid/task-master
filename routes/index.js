@@ -1,15 +1,16 @@
 const express = require("express");
-const verifyToken = require('../middlewares/authMiddleware')
+const { verifyUser } = require('../middlewares/authMiddleware');
 const router = express.Router();
-
 
 const todoRoutes = require("./todoRoutes");
 const userRoutes = require("./userRoutes");
+const adminRoutes = require("./adminRoutes");
 const appRoutes = require("./appRoutes");
 
-
+// Public or protected routes
 router.use("/api/users", userRoutes);
-router.use("/api/users/:user/todo",verifyToken, todoRoutes);
+router.use("/api/admin", adminRoutes);
+router.use("/api/users/:user/todo", verifyUser, todoRoutes);
 router.use("/", appRoutes);
 
 module.exports = router;

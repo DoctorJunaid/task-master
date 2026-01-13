@@ -1,9 +1,9 @@
 // importing module and packages
 const express = require("express");
+require("dotenv").config();
 
 // importing routes
-const allRoutes = require('./routes/index')
-
+const allRoutes = require("./routes/index");
 
 require("dotenv").config();
 const path = require("path");

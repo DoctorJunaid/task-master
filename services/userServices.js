@@ -1,10 +1,13 @@
 const fs = require('fs/promises');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const { signToken } = require('../utils/jwt');
+
+
 
 const filePath = path.join(__dirname , "../data/usersData.json");
 
-// getting all users
+// Helper function to read all users
 const getAll = async () => {
     try {
         const data = await fs.readFile(filePath, 'utf-8');
@@ -14,13 +17,7 @@ const getAll = async () => {
     }
 };
 
-// delete user
-const deleteUser = async (username) =>{
-    const allUsers = await getAll();
-    const updatedUsers = allUsers.filter(u => u.username !== username);
-    await fs.writeFile(filePath , JSON.stringify(updatedUsers , null , 2));
-    return updatedUsers;
-}
+
 
 // login user
 const getUser = async (username, password) => {
@@ -28,8 +25,11 @@ const getUser = async (username, password) => {
     const user = allUsers.find(u => u.username === username);
     if (!user) throw new Error("User not found");
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) throw new Error("Invalid credentials");
-    return user;
+  if (!isMatch) throw new Error("Invalid credentials");
+  
+  const token = signToken({ username: user.username, email: user.email, role: user.role })
+  
+  return { token, user: { username: user.username, email: user.email, role: user.role } };
 };
 
 // resetting user password
@@ -72,20 +72,21 @@ const createUser = async ({ username, email, password }) => {
     const newUser = {
         username,
         email,
+        role : "user",
         password: hashedPassword,
         createdAt: new Date().toISOString()
     };
 
     allUsers.push(newUser);
-    await fs.writeFile(filePath, JSON.stringify(allUsers, null, 2));
-    return { username, email };
+  await fs.writeFile(filePath, JSON.stringify(allUsers, null, 2));
+  const token = signToken({username: newUser.username, email: newUser.email, role: newUser.role } )
+    return { token , user :  {username: newUser.username, email: newUser.email, role: newUser.role } };
 };
 
 module.exports = {
-    getAll,
-    deleteUser,
     getUser,
     reset,
     createUser,
-    updateUser
+    updateUser,
+    getAll
 }

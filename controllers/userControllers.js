@@ -52,32 +52,13 @@ const getUserController = async (req, res) => {
     }
 }
 
-// controller for getting all user info
-const getAllUserController = async (req, res) => {
-    try{
-        const user = await userServices.getAll();
-        res.status(200).json({isStatus: true, msg: "User details fetched successfully", data: user});
-    }catch (error){
-        res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
-    }
-}
-// controller for deleting a user
-const deleteUserController = async (req, res) => {
-    try{
-         await userServices.deleteUser(req.params.username);
-        res.status(200).json({isStatus: true, msg: "User deleted successfully", data: null});
-    }catch (error){
-        res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
-    }
-}
 
 module.exports = {
     createUserController,
     updateUserController,
     resetPasswordUserController,
     getUserController,
-    getAllUserController,
-    deleteUserController
+    
 };
 
 

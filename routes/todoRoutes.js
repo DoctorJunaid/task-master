@@ -11,8 +11,8 @@ const { getAllTodoController,
 router.post("/", createTodoController);
 router.delete("/:id", deleteTodoController);
 router.delete("/", deleteAllTodoController);
-router.patch("/:id/status", updateTodoController);
-router.patch("/:id", updateTodoStatusController);
+router.patch("/:id", updateTodoController);
+router.patch("/:id/status", updateTodoStatusController);
 router.get("/:id", getTodoController);
 router.get("/", getAllTodoController);
 

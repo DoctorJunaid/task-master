@@ -1,19 +1,73 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const SECRET_KEY = process.env.SECRET_KEY;
-const verifyToken = (req , res , next) => {
-    const token = req.header['authorization']?.split(' ')[1] || req.cookies.token;
 
-    if(!token) {
-        return res.status(401).json({ isStatus: false, msg: "Access Denied. No token provided." });
-    }
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        req.user = decoded;
-
-        // 4. Move to the next function (the Controller)
-        next();
-    } catch (error) {
-        res.status(403).json({ isStatus: false, msg: "Invalid or Expired Token" });
-    }
+if (!SECRET_KEY) {
+  throw new Error("JWT_SECRET is not configured");
 }
-module.exports = verifyToken
+
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  let token;
+
+  if (authHeader?.startsWith("Bearer ")) {
+    token = authHeader.slice(7);
+  } else {
+    token = req.cookies?.token;
+  }
+
+  if (!token) {
+    return res.status(401).json({ msg: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ msg: "Invalid or expired token" });
+  }
+};
+
+const verifyUser = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  let token;
+
+  if (authHeader?.startsWith("Bearer ")) {
+    token = authHeader.slice(7);
+  } else {
+    token = req.cookies?.token;
+  }
+
+  if (!token) {
+    return res.status(401).json({ msg: "No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.user = decoded;
+
+    if (req.params.username && decoded.username !== req.params.username) {
+      return res.status(403).json({ msg: "Forbidden: not your account" });
+    }
+
+    next();
+  } catch (err) {
+    return res.status(401).json({ msg: "Invalid or expired token" });
+  }
+};
+
+const adminRoleAuth = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ msg: "User not authenticated" });
+  }
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ msg: "Access denied: Admins only" });
+  }
+  next();
+};
+
+module.exports = {
+  verifyToken,
+  verifyUser,
+  adminRoleAuth,
+};

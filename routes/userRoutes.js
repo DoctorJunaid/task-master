@@ -1,24 +1,19 @@
 const express = require("express");
+const {
+  verifyUser,
+} = require("../middlewares/authMiddleware");
 const router = express.Router();
 const {
-    getAllUserController,
-    createUserController,
-    updateUserController,
-    resetPasswordUserController,
-    getUserController,
-    deleteUserController
+  getUserController,
+  createUserController,
+  updateUserController,
+  resetPasswordUserController,
 } = require("../controllers/userControllers");
 
-// for admins
-router.get("/", getAllUserController);
-router.delete("/:username", deleteUserController);
-
-
 // for users
-router.post("/", createUserController);
-router.patch("/:username", updateUserController);
-router.patch("/:username/password", resetPasswordUserController);
-router.get("/:username", getUserController);
-
+router.post("/signup", createUserController);
+router.post("/login", getUserController);
+router.patch("/:username", verifyUser, updateUserController);
+router.patch("/:username/password", verifyUser, resetPasswordUserController);
 
 module.exports = router;
