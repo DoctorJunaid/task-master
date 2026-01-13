@@ -9,6 +9,8 @@ const { dashboardController,
 router.get("/", dashboardController);
 router.get("/login", loginController);
 router.get("/signup", signupController);
-router.get("/*", unexpectedRouteController);
+router.use( unexpectedRouteController);
+
+
 
 module.exports = router;
