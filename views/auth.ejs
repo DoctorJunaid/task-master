@@ -1,6 +1,7 @@
 
-
-
+    <script>
+        const mode = "<%= typeof mode !== 'undefined' ? mode : 'login' %>";
+    </script>
 
     <div class="auth-wrapper">
         <div class="auth-header">
@@ -22,7 +23,7 @@
 
         <div class="forms-frame">
 
-            <form action="/login" method="POST" class="auth-form active-form" id="loginForm">
+            <form action="/api/users/login" method="POST" class="auth-form active-form" id="loginForm">
                 <div class="input-group">
                     <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>

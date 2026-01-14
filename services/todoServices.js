@@ -14,16 +14,16 @@ const _readFullFile = async () => {
     }
 };
 
-const getAllTodos = async (userId) => {
+const getAllTodos = async (username) => {
     const allData = await _readFullFile();
-    return allData.filter(t => t.userId === userId);
+    return allData.filter(t => t.username === username);
 };
 
-const createTodo = async (title, description, dueDate, userId) => {
+const createTodo = async (title, description, dueDate, username) => {
     const allData = await _readFullFile();
     const newTodo = {
         id: crypto.randomUUID(),
-        userId,
+        username,
         todoName: title,
         todoDescription: description,
         dueDate: dueDate,
@@ -32,51 +32,51 @@ const createTodo = async (title, description, dueDate, userId) => {
     };
     allData.push(newTodo);
     await fs.writeFile(filePath, JSON.stringify(allData, null, 2));
-    return allData.filter(t => t.userId === userId);
+    return allData.filter(t => t.username === username);
 };
 
-const deleteTodo = async (id, userId) => {
+const deleteTodo = async (id, username) => {
     const allData = await _readFullFile();
     // Keep everyone else's todos OR todos that don't match this ID
-    const updatedList = allData.filter(t => t.id !== id || t.userId !== userId);
+    const updatedList = allData.filter(t => t.id !== id || t.username !== username);
 
     await fs.writeFile(filePath, JSON.stringify(updatedList, null, 2));
     // Return ONLY this user's remaining list
-    return updatedList.filter(t => t.userId === userId);
+    return updatedList.filter(t => t.username === username);
 };
 
-const updateTodo = async ({ id, todoName, todoDescription, dueDate, userId }) => {
+const updateTodo = async ({ id, todoName, todoDescription, dueDate, username }) => {
     const allData = await _readFullFile();
-    const index = allData.findIndex(t => t.id === id && t.userId === userId);
+    const index = allData.findIndex(t => t.id === id && t.username === username);
 
     if (index !== -1) {
         allData[index] = { ...allData[index], todoName, todoDescription, dueDate };
         await fs.writeFile(filePath, JSON.stringify(allData, null, 2));
     }
-    return allData.filter(t => t.userId === userId);
+    return allData.filter(t => t.username === username);
 };
 
-const updateTodoStatus = async (id, userId) => {
+const updateTodoStatus = async (id, username) => {
     const allData = await _readFullFile();
-    const index = allData.findIndex(t => t.id === id && t.userId === userId);
+    const index = allData.findIndex(t => t.id === id && t.username === username);
 
     if (index !== -1) {
         allData[index] = { ...allData[index], isDone: !allData[index].isDone };
         await fs.writeFile(filePath, JSON.stringify(allData, null, 2));
     }
-    return allData.filter(t => t.userId === userId);
+    return allData.filter(t => t.username === username);
 };
 
-const deleteAllTodo = async (userId) => {
+const deleteAllTodo = async (username) => {
     const allData = await _readFullFile();
-    const remainingData = allData.filter(t => t.userId !== userId);
+    const remainingData = allData.filter(t => t.username !== username);
     await fs.writeFile(filePath, JSON.stringify(remainingData, null, 2));
     return [];
 };
 
-const getTodo = async (id, userId) => {
+const getTodo = async (id, username) => {
     const allData = await _readFullFile();
-    return allData.find(t => t.id === id && t.userId === userId) || null;
+    return allData.find(t => t.id === id && t.username === username) || null;
 };
 
 module.exports = {

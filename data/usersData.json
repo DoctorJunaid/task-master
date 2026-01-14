@@ -10,5 +10,47 @@
     "email": "tests@abc.com",
     "password": "$2b$10$LoRZIYzzrDEokXtmddE7cuNvVHJK04TcAZ3L3m5pwdW6gjoVIsZ8u",
     "createdAt": "2026-01-13T12:38:44.781Z"
+  },
+  {
+    "username": "abc123",
+    "email": "abc@xyz.com",
+    "role": "user",
+    "password": "$2b$10$YLjlL546IpJdEBft1bvu9er.vCyyeEhjiYpZYfMluZotWXVK2HBcW",
+    "createdAt": "2026-01-14T11:19:37.502Z"
+  },
+  {
+    "username": "Simon",
+    "email": "jalibaba88@gmail.com",
+    "role": "user",
+    "password": "$2b$10$hyaf0oBGAtr8jN9wBbpa8.Pj8VV3JdamqCktkZZTNyNuero.Zdliu",
+    "createdAt": "2026-01-14T11:26:13.616Z"
+  },
+  {
+    "username": "junaid.aurangzeb1@gmail.com",
+    "email": "junaid.aurangzeb1@gmail.com",
+    "role": "user",
+    "password": "$2b$10$vP7BLB1ZzX1vT6P//XitZO85bhC00o6Xl3ohtFEfBbQyFNEGC7oue",
+    "createdAt": "2026-01-14T11:30:49.910Z"
+  },
+  {
+    "username": "NOESCAPE",
+    "email": "NOESCAPE@gmail.com",
+    "role": "user",
+    "password": "$2b$10$LjvTUODJec4zEQSvDS/DpOLu0/vXdsck48viGuKec/2fxKDWTQSr.",
+    "createdAt": "2026-01-14T17:24:20.754Z"
+  },
+  {
+    "username": "Uzair",
+    "email": "Uzair@gmail.com",
+    "role": "user",
+    "password": "$2b$10$2pZ2oyhSIJu6wCRdWEr2weSS3aEoEs6OjjIk5xjUpcJLfGVuTeyNS",
+    "createdAt": "2026-01-14T17:35:36.455Z"
+  },
+  {
+    "username": "junaid",
+    "email": "junaid@gmail.com",
+    "role": "user",
+    "password": "$2b$10$Mnl8u9ziv03eSvoFiMxC4.5HjEU91vNtSBxjKxLIrcgQOKYZP1MyC",
+    "createdAt": "2026-01-14T18:46:58.275Z"
   }
 ]

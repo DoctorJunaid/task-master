@@ -1,39 +1,79 @@
+const { verifyToken } = require("../utils/jwt");
 
-const dashboardController = (req , res) => {
-        // session details add later
-        res.render('layout' , {
-            pageTitle: 'Dashboard',
-            // user: req.session.user || null,
-            view : 'dashboard'
-        });
+const dashboardController = async (req, res) => {
+  const token = req.cookies?.token;
+  let user = null;
+
+  if (token) {
+    user = verifyToken(token);
+      const response = await fetch(
+          `http://localhost:3000/api/users/${user.username}/todo`,
+          {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json",
+                  // Send the token to the API for verification
+                  Authorization: `Bearer ${token}`,
+              },
+          },
+      );
+
+      let todos = await response.json();
+      console.log(todos);
+
+      res.render("dashboard", {
+          pageTitle: "Dashboard",
+          user: user,
+          todo: todos.data,
+          token : token
+      });
+  };
+  }
+
+
+
+const loginController = (req, res) => {
+  const token = req.cookies?.token;
+  let user = null;
+
+  if (token) {
+    user = verifyToken(token);
+  }
+
+  res.render("layout", {
+    pageTitle: "Login",
+    view: "auth",
+    mode: "login",
+    user: user,
+  });
 };
 
-const loginController = (req , res) => {
-    res.render('layout' , {
-        pageTitle: 'Login' ,
-        view : 'auth',
-        mode : 'login'
-    });
+const signupController = (req, res) => {
+  const token = req.cookies?.token;
+  let user = null;
+
+  if (token) {
+    user = verifyToken(token);
+  }
+
+  res.render("layout", {
+    pageTitle: "Signup",
+    view: "auth",
+    mode: "signup",
+    user: user,
+  });
 };
 
-const signupController = (req , res) => {
-    res.render('layout' , {
-        pageTitle: 'Signup' ,
-        view : 'auth',
-        mode : 'signup'
-    });
-};
-
-const unexpectedRouteController = (req , res) => {
-    res.render('layout' , {
-        pageTitle: 'Page Not Found' ,
-        view : '404'
-    });
+const unexpectedRouteController = (req, res) => {
+  res.render("layout", {
+    pageTitle: "Page Not Found",
+    view: "404",
+  });
 };
 
 module.exports = {
-    dashboardController ,
-    loginController ,
-    signupController ,
-    unexpectedRouteController
-}
+  dashboardController,
+  loginController,
+  signupController,
+  unexpectedRouteController,
+};

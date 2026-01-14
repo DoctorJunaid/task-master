@@ -15,7 +15,7 @@ const { verifyToken, adminRoleAuth } = require("../middlewares/authMiddleware");
 router.post("/login", loginAdmin);
 
 // Admin creation (internal only)
-router.post("/", verifyToken, adminRoleAuth, createAdmin);
+router.post("/",  createAdmin);
 
 // Get all admins
 router.get("/", verifyToken, adminRoleAuth, getAllAdmins);

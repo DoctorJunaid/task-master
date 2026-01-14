@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "username": "helslo",
+    "password": "$2b$10$Yzfjj3aMjvc/6GlzZRkcL.79hslZvJAVsMdTfx6IPgxcTdASScsem",
+    "email": "tests@abc.com"
+  }
+]

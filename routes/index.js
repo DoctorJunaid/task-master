@@ -10,7 +10,7 @@ const appRoutes = require("./appRoutes");
 // Public or protected routes
 router.use("/api/users", userRoutes);
 router.use("/api/admin", adminRoutes);
-router.use("/api/users/:user/todo", verifyUser, todoRoutes);
+router.use("/api/users/:username/todo", verifyUser, todoRoutes);
 router.use("/", appRoutes);
 
 module.exports = router;

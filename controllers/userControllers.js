@@ -5,10 +5,22 @@ const createUserController = async (req, res) => {
     try{
         const {username, email, password} = req.body;
         if(!username || !email || !password) return res.status(400).json({isStatus: false, msg: "Please provide all required fields", data: null});
-        const user = await userServices.createUser({username, email, password});
-        res.status(201).json({isStatus: true, msg: "User created successfully", data: user});
+        const result = await userServices.createUser({username, email, password});
+        
+        // Set HTTP-only cookie
+        res.cookie('token', result.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            sameSite: 'strict'
+        });
+        
+        res.status(201).json({isStatus: true, msg: "User created successfully", data: result.user});
     }catch(error){
-        res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
+        if(error.message === "User already exists") {
+            return res.status(409).json({isStatus: false, msg: error.message, data: null});
+        }
+        res.status(500).json({isStatus: false, msg: error.message || "Internal Server Error", data: null});
     }
 }
 
@@ -23,7 +35,7 @@ const updateUserController = async (req, res) => {
         const user = await userServices.updateUser(username, { newUsername, email });
         res.status(200).json({ isStatus: true, msg: "Updated successfully", data: user });
     } catch (error) {
-        res.status(500).json({ isStatus: false, msg: "Internal Server Error" });
+        res.status(500).json({ isStatus: false, msg: error.message || "Internal Server Error" });
     }
 };
 
@@ -36,7 +48,7 @@ const resetPasswordUserController = async (req, res) => {
         await userServices.reset(username, password);
         res.status(200).json({isStatus: true, msg: "Password reset Successfully ", data: null});
     }catch(error){
-        res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
+        res.status(500).json({isStatus: false, msg: error.message || "Internal Server Error", data: null});
     }
 }
 
@@ -44,12 +56,33 @@ const resetPasswordUserController = async (req, res) => {
 const getUserController = async (req, res) => {
     try{
         const {username , password } = req.body;
-        if(!username || !password) return res.status(400).json({isStatus: false, msg: "Please provide new password", data: null});
-        const user = await userServices.getUser(username , password);
-        res.status(200).json({isStatus: true, msg: "Login successfully", data: user});
+        if(!username || !password) return res.status(400).json({isStatus: false, msg: "Please provide email and password", data: null});
+        const result = await userServices.getUser(username , password);
+        
+        // Set HTTP-only cookie
+        res.cookie('token', result.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            sameSite: 'strict'
+        });
+        
+        res.status(200).json({isStatus: true, msg: "Login successfully", data: result.user});
     }catch(error){
-        res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
+        if(error.message === "User not found") {
+            return res.status(404).json({isStatus: false, msg: error.message, data: null});
+        }
+        if(error.message === "Invalid credentials") {
+            return res.status(401).json({isStatus: false, msg: error.message, data: null});
+        }
+        res.status(500).json({isStatus: false, msg: error.message || "Internal Server Error", data: null});
     }
+}
+
+// controller for logging out a user
+const logoutController = (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({isStatus: true, msg: "Logged out successfully", data: null});
 }
 
 
@@ -58,7 +91,7 @@ module.exports = {
     updateUserController,
     resetPasswordUserController,
     getUserController,
-    
+    logoutController,
 };
 
 

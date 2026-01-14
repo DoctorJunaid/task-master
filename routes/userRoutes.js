@@ -8,11 +8,13 @@ const {
   createUserController,
   updateUserController,
   resetPasswordUserController,
+  logoutController,
 } = require("../controllers/userControllers");
 
 // for users
 router.post("/signup", createUserController);
 router.post("/login", getUserController);
+router.post("/logout", logoutController);
 router.patch("/:username", verifyUser, updateUserController);
 router.patch("/:username/password", verifyUser, resetPasswordUserController);
 

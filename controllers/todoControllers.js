@@ -4,12 +4,12 @@ const todoServices = require('../services/todoServices');
 const createTodoController = async (req, res) => {
     try {
         const {todoName, todoDescription, dueDate} = req.body;
-        const userId = req.userId; // Get userId from request object
+        const username = req.user?.username;
 
-        if (!userId) return res.status(401).json({isStatus: false, msg: "Unauthorized", data: null});
+        if (!username) return res.status(401).json({isStatus: false, msg: "Unauthorized", data: null});
         if (!todoName) return res.status(400).json({isStatus: false, msg: "Title is required", data: null});
 
-        const allTodos = await todoServices.createTodo(todoName, todoDescription, dueDate, userId);
+        const allTodos = await todoServices.createTodo(todoName, todoDescription, dueDate, username);
         res.status(201).json({isStatus: true, msg: "Todo created successfully", data: allTodos});
     } catch (error) {
         res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
@@ -20,11 +20,11 @@ const createTodoController = async (req, res) => {
 const deleteTodoController = async (req, res) => {
     try {
         const id = req.params.id;
-        const userId = req.userId;
+        const username = req.user?.username;
 
         if (!id) return res.status(400).json({isStatus: false, msg: "Invalid Id", data: null});
 
-        const allTodos = await todoServices.deleteTodo(id, userId);
+        const allTodos = await todoServices.deleteTodo(id, username);
         res.status(200).json({isStatus: true, msg: "Todo deleted successfully", data: allTodos});
     } catch (error) {
         res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
@@ -34,9 +34,9 @@ const deleteTodoController = async (req, res) => {
 // for deleting all todos of the user
 const deleteAllTodoController = async (req, res) => {
     try {
-        const userId = req.userId;
+        const username = req.user?.username;
 
-        const allTodos = await todoServices.deleteAllTodo(userId);
+        const allTodos = await todoServices.deleteAllTodo(username);
         res.status(200).json({isStatus: true, msg: "All todos deleted successfully", data: allTodos});
     } catch (error) {
         res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
@@ -47,7 +47,7 @@ const deleteAllTodoController = async (req, res) => {
 const updateTodoController = async (req, res) => {
     try {
         const id = req.params.id;
-        const userId = req.userId;
+        const username = req.user?.username;
         const {todoName, todoDescription, dueDate} = req.body;
 
         if (!id) return res.status(400).json({isStatus: false, msg: "Invalid Id", data: null});
@@ -57,7 +57,7 @@ const updateTodoController = async (req, res) => {
             todoName,
             todoDescription,
             dueDate,
-            userId
+            username
         });
         res.status(200).json({isStatus: true, msg: "Todo updated successfully", data: allTodos});
     } catch (error) {
@@ -68,12 +68,12 @@ const updateTodoController = async (req, res) => {
 // for updating todos status of the user
 const updateTodoStatusController = async (req, res) => {
     try {
-        const userId = req.userId;
+        const username = req.user?.username;
         const id = req.params.id;
 
         if (!id) return res.status(400).json({isStatus: false, msg: "Invalid Id", data: null});
 
-        const allTodos = await todoServices.updateTodoStatus(id, userId);
+        const allTodos = await todoServices.updateTodoStatus(id, username);
         res.status(200).json({isStatus: true, msg: "Todo status updated successfully", data: allTodos});
     } catch (error) {
         res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
@@ -84,11 +84,11 @@ const updateTodoStatusController = async (req, res) => {
 const getTodoController = async (req, res) => {
     try {
         const id = req.params.id;
-        const userId = req.userId;
+        const username = req.user?.username;
 
         if (!id) return res.status(400).json({isStatus: false, msg: "Invalid Id", data: null});
 
-        const todo = await todoServices.getTodo(id, userId);
+        const todo = await todoServices.getTodo(id, username);
         res.status(200).json({isStatus: true, msg: "Todo fetched successfully", data: todo});
     } catch (error) {
         res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
@@ -98,9 +98,9 @@ const getTodoController = async (req, res) => {
 // for getting all todos of the user
 const getAllTodoController = async (req, res) => {
     try {
-        const userId = req.userId;
+        const username = req.user?.username;
 
-        const allTodos = await todoServices.getAllTodos(userId);
+        const allTodos = await todoServices.getAllTodos(username);
         res.status(200).json({isStatus: true, msg: "All todos fetched successfully", data: allTodos});
     } catch (error) {
         res.status(500).json({isStatus: false, msg: "Internal Server Error", data: null});
