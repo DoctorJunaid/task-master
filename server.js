@@ -17,15 +17,18 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Handle CORS - MUST be before all routes
+// CORS middleware - must be first
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.sendStatus(200);
+});
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
   next();
 });
 
@@ -49,17 +52,11 @@ app.use(cookieParser());
 
 // database connecting 
 app.use(async (req, res, next) => {
-  
-  if (req.method === "OPTIONS") {
-    return next();
-  }
-
   try {
     await connectDB();
     next();
   } catch (err) {
     console.log(err);
-    
     res.status(500).json({ error: "Database connection failed" });
   }
 });
