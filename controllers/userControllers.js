@@ -1,3 +1,4 @@
+const cookieParser = require("cookie-parser");
 const userServices = require("../services/userServices");
 
 // controller for signUp a user
@@ -68,34 +69,72 @@ const updateUserController = async (req, res) => {
 };
 
 // controller for resetting password
+const jwt = require('jsonwebtoken');
+
 const resetPasswordUserController = async (req, res) => {
   try {
-    const { username } = req.params;
     const { password } = req.body;
-    if (!username || !password)
-      return res
-        .status(400)
-        .json({
-          isStatus: false,
-          msg: "Please provide new password",
-          data: null,
-        });
-    await userServices.reset(username, password);
-    res
-      .status(200)
-      .json({
-        isStatus: true,
-        msg: "Password reset Successfully ",
-        data: null,
-      });
-  } catch (error) {
-    res
-      .status(500)
-      .json({
+
+    const token = req.body.token || req.cookies?.token;
+
+    if (!token) {
+      return res.status(401).json({
         isStatus: false,
-        msg: error.message || "Internal Server Error",
+        msg: "Unauthorized: No token provided.",
         data: null,
       });
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        isStatus: false,
+        msg: "New password is required",
+        data: null,
+      });
+    }
+
+    // 2. Verify Token & Get User
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const username = decoded.username; 
+
+    if (!username) {
+      return res.status(403).json({
+        isStatus: false,
+        msg: "Invalid Token payload",
+      });
+    }
+
+    // 3. Perform Reset
+    await userServices.reset(username, password);
+
+   
+
+    return res.status(200).json({
+      isStatus: true,
+      msg: "Password updated successfully",
+      data: null,
+    });
+
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ 
+        isStatus: false, 
+        msg: "Session or link has expired. Please login or request a new link." 
+      });
+    }
+    
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(403).json({ 
+        isStatus: false, 
+        msg: "Invalid token." 
+      });
+    }
+
+    return res.status(500).json({
+      isStatus: false,
+      msg: error.message || "Internal Server Error",
+      data: null,
+    });
   }
 };
 

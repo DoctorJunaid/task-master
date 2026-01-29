@@ -14,8 +14,8 @@ const {
 router.post("/signup", createUserController);
 router.post("/login", getUserController);
 router.post("/logout", logoutController);
-router.patch("/:username", verifyUser, updateUserController);
-router.patch("/:username/password", verifyUser, resetPasswordUserController);
+router.patch("/password", resetPasswordUserController);
 router.post("/forgot-password", forgotPasswordController);
+router.patch("/:username", verifyUser, updateUserController);
 
 module.exports = router;
