@@ -214,6 +214,19 @@ const forgotPasswordController = async (req, res) => {
   }
 };
 
+
+
+const getProfileController = (req, res) => {
+  
+  res.status(200).json({
+    isStatus: true,
+    msg: "User is authenticated",
+    data: req.user 
+  });
+};
+
+
+
 module.exports = {
   createUserController,
   updateUserController,
@@ -221,4 +234,6 @@ module.exports = {
   getUserController,
   logoutController,
   forgotPasswordController,
+  getProfileController 
+
 };

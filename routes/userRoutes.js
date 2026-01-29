@@ -8,6 +8,7 @@ const {
   resetPasswordUserController,
   logoutController,
   forgotPasswordController,
+  getProfileController
 } = require("../controllers/userControllers");
 
 // for users
@@ -17,5 +18,9 @@ router.post("/logout", logoutController);
 router.patch("/password", resetPasswordUserController);
 router.post("/forgot-password", forgotPasswordController);
 router.patch("/:username", verifyUser, updateUserController);
+router.get("/me", verifyUser, getProfileController); 
+
+module.exports = router;
+
 
 module.exports = router;
