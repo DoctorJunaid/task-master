@@ -18,8 +18,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // CORS middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://todo32.vercel.app",
+  process.env.FRONT_END_URL
+].filter(Boolean); // Remove undefined values
+
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://todo32.vercel.app", process.env.FRONT_END_URL],
+  origin: allowedOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -27,6 +33,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Handle preflight requests explicitly
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
