@@ -13,6 +13,7 @@ const getUser = async (email, password) => {
 
   const token = signToken({
     username: user.username,
+    email : user.email,
     id: user._id,
     role: user.role,
   });
@@ -58,6 +59,7 @@ const createUser = async ({ username, email, password }) => {
   });
 
   const token = signToken({
+    email : user.email,
     username: user.username,
     id: user._id,
     role: user.role,

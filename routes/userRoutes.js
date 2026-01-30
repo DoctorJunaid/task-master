@@ -23,4 +23,3 @@ router.get("/me", verifyUser, getProfileController);
 module.exports = router;
 
 
-module.exports = router;
