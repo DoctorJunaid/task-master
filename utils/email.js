@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const getResetPasswordTemplate = require("./emailTemplates");
 const MAIL_PASS = process.env.MAIL_PASS;
 // Create a transporter using Ethereal test credentials.
 // For production, replace with your actual SMTP server details.
@@ -14,17 +15,18 @@ const transporter = nodemailer.createTransport({
 
 // Send an email using async/await
 const sendMail = async (senderMail, subject, Message , resetLink) => {
-  ;
   const info = await transporter.sendMail({
     from: '"TaskMaster App" <naseebnoman39@gmail.com>',
     to: senderMail,
     subject: subject,
     text: Message, // Plain-text version of the message
-    html: `<p>Click the link to reset your password:</p>
-           <a href="${resetLink}">${Message}</a>`, // HTML version of the message
+    html: getResetPasswordTemplate(resetLink), // HTML version of the message
   });
+  
 
   return info.messageId;
 };
 
 module.exports = sendMail;
+
+
