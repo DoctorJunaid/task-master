@@ -3,7 +3,7 @@
 A full-featured REST API backend for a Todo application built with Node.js, Express, and EJS for server-side rendering. Features user authentication, admin panel, and complete CRUD operations.
 
 # API Routes
-Route : https:todo32.vercel.app
+Route : https://todo32.vercel.app
 ## 👤 User Authentication & Profile
 **Base Route:** `/api/users`  
 
@@ -47,8 +47,6 @@ _All Todo routes require the user to be logged in._
 - 🔐 **User Authentication** - JWT-based login/signup system
 - 👑 **Admin Panel** - Admin user management and oversight
 - 📋 **Todo Management** - Complete CRUD operations for todos
-
-- 📁 **File-based Storage** - JSON file database system
 - 🛡️ **Security** - Password hashing with bcrypt
 
 ## 🚀 Quick Start
@@ -95,7 +93,6 @@ _All Todo routes require the user to be logged in._
 - **Backend Framework:** Express.js
 - **Authentication:** JSON Web Tokens (JWT)
 - **Password Hashing:** bcrypt
-- **Database:** File-based JSON storage
 - **Environment Management:** dotenv
 
 ## 🛡️ Security Features
