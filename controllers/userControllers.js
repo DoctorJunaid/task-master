@@ -1,13 +1,9 @@
 const userServices = require("../services/userServices");
+const User = require("../models/Users");
 
 // controller for signUp a user
 const createUserController = async (req, res) => {
   try {
-    await User.deleteMany({
-      $or: [{ email }, { username }],
-      isVerified: false,
-      verificationTokenExpires: { $lt: Date.now() }, // Expired tokens ONLY
-    });
     const { username, email, password } = req.body;
     if (!username || !email || !password)
       return res.status(400).json({
@@ -15,6 +11,12 @@ const createUserController = async (req, res) => {
         msg: "Please provide all required fields",
         data: null,
       });
+
+    await User.deleteMany({
+      $or: [{ email }, { username }],
+      isVerified: false,
+      verificationTokenExpires: { $lt: Date.now() }, // Expired tokens ONLY
+    });
     const result = await userServices.createUser({ username, email, password });
 
     res.status(201).json({
