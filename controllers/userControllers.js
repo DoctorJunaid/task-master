@@ -3,6 +3,11 @@ const userServices = require("../services/userServices");
 // controller for signUp a user
 const createUserController = async (req, res) => {
   try {
+    await User.deleteMany({
+      $or: [{ email }, { username }],
+      isVerified: false,
+      verificationTokenExpires: { $lt: Date.now() }, // Expired tokens ONLY
+    });
     const { username, email, password } = req.body;
     if (!username || !email || !password)
       return res.status(400).json({
@@ -235,17 +240,15 @@ const verifyEmailController = async (req, res) => {
     if (!token)
       return res.status(400).json({ isStatus: false, msg: "token is missing" });
     const user = await userServices.verifyEmail(token);
-    res
-      .status(201)
-      .json({
-        isStatus: true,
-        message: "user Sucessfully Verified",
-        data: {
-          id: user._id,
-          email: user.email,
-          isVerified: user.isVerified,
-        },
-      });
+    res.status(201).json({
+      isStatus: true,
+      message: "user Sucessfully Verified",
+      data: {
+        id: user._id,
+        email: user.email,
+        isVerified: user.isVerified,
+      },
+    });
   } catch (error) {
     res.status(500).json({ isStatus: false, msg: error.message });
   }
