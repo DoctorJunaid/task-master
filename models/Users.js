@@ -3,14 +3,19 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    require: [true, "username is require"],
+    required: [true, "username is required"],
     trim: true,
     minlength: 3,
     unique: true,
   },
+  googleId: {
+    type: String,
+    unique: true , 
+    sparse : true 
+  },
   email: {
     type: String,
-    require: [true, "email is require"],
+    required: [true, "email is required"],
     lowercase: true,
     unique: true,
     trim: true,
@@ -23,7 +28,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: function () { return !this.googleId; },
       minlength : 6,
       select: false 
   },
@@ -39,6 +44,7 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+ 
   }, {
     
   timestamps: true
