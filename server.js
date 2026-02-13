@@ -3,16 +3,13 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const connectDB = require("./config/db");
-const cors = require("cors")
-
-
+const cors = require("cors");
+const passport = require("./config/passport");
 
 // importing routes
 const allRoutes = require("./routes/index");
 
 require("dotenv").config();
-
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   "http://localhost:5173",
   "https://todo32.vercel.app",
-  process.env.FRONT_END_URL
+  process.env.FRONT_END_URL,
 ].filter(Boolean); // Remove undefined values
 
 const corsOptions = {
@@ -37,13 +34,9 @@ app.options("*", cors(corsOptions)); // Handle preflight requests explicitly
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize());
 
-
-
-
-
-
-// database connecting 
+// database connecting
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -60,7 +53,6 @@ app.use("/", allRoutes);
 //   console.log(`Server is running on PORT ${PORT}`);
 // });
 
-
-// for vercel 
+// for vercel
 
 module.exports = app;
