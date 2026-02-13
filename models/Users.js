@@ -10,8 +10,8 @@ const userSchema = new mongoose.Schema({
   },
   googleId: {
     type: String,
-    unique: true , 
-    sparse : true 
+    unique: true,
+    sparse: true
   },
   email: {
     type: String,
@@ -22,19 +22,19 @@ const userSchema = new mongoose.Schema({
     match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address']
   },
   role: {
-      type: String,
-      enum: ['user', 'admin'],
-      default: 'user'
-    },
-    password: {
-      type: String,
-      required: function () { return !this.googleId; },
-      minlength : 6,
-      select: false 
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  password: {
+    type: String,
+    required: function () { return !this.googleId; },
+    minlength: 6,
+    select: false
   },
   isVerified: {
     type: Boolean,
-    default : false
+    default: false
   },
   verificationToken: {
     type: String,
@@ -42,13 +42,14 @@ const userSchema = new mongoose.Schema({
   },
   verificationTokenExpires: {
     type: Date,
-    default: null
+    default: null,
+    expires: 0 // MongoDB will auto-delete doc when this date is passed
   },
- 
-  }, {
-    
+
+}, {
+
   timestamps: true
-    });
+});
 
 const User = mongoose.model('User', userSchema);
 
