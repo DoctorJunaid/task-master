@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
     default: null,
     expires: 0 // MongoDB will auto-delete doc when this date is passed
   },
+  profileImage: {
+    type:String,
+    default : ""
+  }
 
 }, {
 

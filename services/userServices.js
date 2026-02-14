@@ -155,11 +155,30 @@ const verifyEmail = async (token) => {
     return user;
     
   }
-  module.exports = {
+// services for uploading profile image 
+const updateProfileImage = async (username, imageUrl) => {
+  const user = await User.findOneAndUpdate(
+    { username },
+    { profileImage: imageUrl },
+    { new: true } // Returns the updated document
+  );
+
+  if (!user) throw new Error("User not found");
+  
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
+    profileImage: user.profileImage, 
+    role: user.role,
+  };
+};
+module.exports = {
     getUser,
     reset,
     createUser,
     updateUser,
     forgotPassword,
-    verifyEmail
+  verifyEmail,
+  updateProfileImage
   };

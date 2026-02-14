@@ -226,12 +226,22 @@ const changePasswordController = async (req, res) => {
   }
 };
 
-const getProfileController = (req, res) => {
-  res.status(200).json({
-    isStatus: true,
-    msg: "User is authenticated",
-    data: req.user,
-  });
+const getProfileController = async (req, res) => {
+  try {
+    // fetch full user data to ensure we have latest fields
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ isStatus: false, msg: "User not found" });
+    }
+
+    res.status(200).json({
+      isStatus: true,
+      msg: "User is authenticated",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({ isStatus: false, msg: error.message });
+  }
 };
 
 // controller for verification Email
@@ -256,6 +266,38 @@ const verifyEmailController = async (req, res) => {
   }
 };
 
+// upload user controoler
+const uploadProfileImageController = async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // The middleware attaches the Cloudinary URL to req.file.path
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({
+        isStatus: false,
+        msg: "No file uploaded or upload failed",
+        data: null,
+      });
+    }
+
+    const imageUrl = req.file.path;
+
+    const user = await userServices.updateProfileImage(username, imageUrl);
+
+    res.status(200).json({
+      isStatus: true,
+      msg: "Profile image updated successfully",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      isStatus: false,
+      msg: error.message || "Internal Server Error",
+    });
+  }
+};
+
+
 module.exports = {
   createUserController,
   updateUserController,
@@ -266,4 +308,5 @@ module.exports = {
   getProfileController,
   changePasswordController,
   verifyEmailController,
+  uploadProfileImageController
 };

@@ -24,6 +24,11 @@ passport.use(new GoogleStrategy({
       let user = await User.findOne({ googleId: profile.id });
       // If user exists with googleId, login
       if (user) {
+        // sync profile photo if user doesn't have one
+        if (!user.profileImage && profile.photos && profile.photos.length > 0) {
+          user.profileImage = profile.photos[0].value;
+          await user.save();
+        }
         return done(null, user);
       }
 
@@ -41,18 +46,25 @@ passport.use(new GoogleStrategy({
           user.googleId = profile.id;
           // If they verified via Google, we can mark email as verified
           if (!user.isVerified) user.isVerified = true;
+          // Set profile image if not present
+          if (!user.profileImage && profile.photos && profile.photos.length > 0) {
+            user.profileImage = profile.photos[0].value;
+          }
           await user.save();
         }
         return done(null, user);
       } else {
         // Create new user
         const newUsername = generateUsername(email);
+        const newProfileImage = (profile.photos && profile.photos.length > 0) ? profile.photos[0].value : "";
+
         user = await User.create({
           googleId: profile.id,
           email: email,
           username: newUsername,
           isVerified: true,
-          role: 'user' // default role
+          role: 'user', // default role
+          profileImage: newProfileImage
         });
         return done(null, user);
       }

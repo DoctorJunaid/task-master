@@ -1,5 +1,5 @@
 const express = require("express");
-const { verifyUser } = require("../middlewares/authMiddleware");
+const { verifyUser, verifyToken } = require("../middlewares/authMiddleware");
 const router = express.Router();
 const {
   getUserController,
@@ -11,9 +11,11 @@ const {
   getProfileController,
   changePasswordController,
   verifyEmailController,
+  uploadProfileImageController,
 } = require("../controllers/userControllers");
 const passport = require("../config/passport");
 const googleCallbackController = require("../controllers/googleCallbackController");
+const upload = require("../middlewares/uploadMiddleware");
 
 // for users google login
 
@@ -30,6 +32,8 @@ router.get(
   googleCallbackController,
 );
 
+
+
 // for users
 router.post("/signup", createUserController);
 router.post("/login", getUserController);
@@ -42,5 +46,6 @@ router.patch("/change-password", verifyUser, changePasswordController);
 router.get("/verify-email", verifyEmailController);
 
 router.patch("/:username", verifyUser, updateUserController);
+router.patch('/:username/upload-image', verifyToken, verifyUser, upload.single("profileImage"),uploadProfileImageController)
 
 module.exports = router;
