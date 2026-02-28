@@ -63,8 +63,7 @@ passport.use(new GoogleStrategy({
           email: email,
           username: newUsername,
           isVerified: true,
-          role: 'user', // default role
-          profileImage: newProfileImage
+          role: 'user', 
         });
         return done(null, user);
       }

@@ -5,6 +5,9 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const cors = require("cors");
 const passport = require("./config/passport");
+const {connectRedis} = require("./config/redis")
+
+ connectRedis();
 
 // importing routes
 const allRoutes = require("./routes/index");
